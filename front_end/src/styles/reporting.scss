@@ -1,0 +1,658 @@
+[hidden] {
+  display: none !important;
+}
+
+#reporting {
+
+  // LOL hax
+  position: fixed;
+  top: 50px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  background: white;
+  color: $darkgrey;
+  display: flex;
+
+  > div {
+    display: flex;
+    flex: 1;
+  }
+
+  // Sidebar
+  aside.sidebar {
+    position: relative;
+    font-size: 13px;
+    width: 300px;
+    flex-shrink: 0;
+    border-right: 1px solid darken($light-blue, 5%);
+    background: $light-blue;
+    overflow-y: auto;
+    transition: width 0.2s ease-in-out;
+    &.collapsed {
+      overflow: hidden;
+      width: 0;
+    }
+  }
+
+  // Main section
+  main.main {
+    padding: 20px 50px;
+    flex: 1;
+    overflow-y: auto;
+  }
+
+  // Icon sidebar
+  .sidebar.icons {
+    background: $secondary-blue;
+    width: 85px;
+    border-right: 1px solid darken($secondary-blue, 5%);
+    box-shadow: none;
+
+    text-align: center;
+    color: lighten($secondary-blue, 40%);
+    font-weight: 400;
+
+    nav a {
+      display: block;
+      color: inherit;
+      padding: 10px 0;
+      border-bottom: 1px solid darken($secondary-blue, 5%);
+      font-size: 12px;
+      .icon-label {
+        display: block;
+      }
+      .icon {
+        font-size: 32px;
+        line-height: 1;
+      }
+      &.active {
+        color: white;
+      }
+      &:hover {
+        text-decoration: none;
+        background: lighten($secondary-blue, 10%);
+        color: white;
+        cursor: pointer;
+      }
+    }
+  }
+
+  // Report settings sidebar
+  .report-settings {
+    .Select + .Select {
+      margin-top: 5px;
+    }
+    section {
+      padding: 20px;
+      border-bottom: 1px solid $border-blue;
+      &.extra {
+        background: darken($light-blue, 3%);
+      }
+      .form-group {
+        margin: 0;
+        &+.form-group {
+          margin-top: 10px;
+        }
+      }
+      &.flex-wrapper {
+        display: flex;
+        .form-group {
+          margin-top: 0;
+        }
+      }
+      .half {
+        width: 50%;
+        &:first-child {
+          margin-right: 5%;
+        }
+      }
+    }
+  }
+
+  .btn {
+    border-radius: 2px;
+
+    > span.icon {
+      font-size: 18px;
+      position: relative;
+      top: 1px;
+      margin-right: 2px;
+    }
+
+    &.btn-emphasis {
+      padding: 8px 15px;
+      box-shadow: 0 3px 5px -3px fade-out($darkgrey, 0.8);
+    }
+
+    &.btn-default {
+      color: inherit;
+      border-color: darken($border-blue, 5%);
+      &:hover {
+        background: white;
+        border-color: darken($border-blue, 10%);
+      }
+    }
+
+    &.btn-pink {
+      background: $pink;
+      color: white;
+      &:hover {
+        background: lighten($pink, 5%);
+      }
+    }
+  }
+
+  h2 {
+    margin: 40px 0 30px 30px;
+  }
+
+  .table-summary {
+    margin-bottom: 30px;
+    border: none;
+    border-left: 1px solid $greyborder;
+    td, th {
+      border: none;
+    }
+    td {
+      background: white;
+      padding: 3px 30px;
+      font-family: inherit;
+      font-size: 16px;
+    }
+    td:first-child {
+      font-size: 14px;
+      white-space: pre;
+      font-weight: bold;
+      color: $pink;
+    }
+    td:nth-child(2) {
+      width: 100%;
+    }
+  }
+}
+
+.table {
+  $tblHzPadding: 25px;
+
+  table {
+    border-top: 1px solid $darkerborder;
+    border-bottom: 1px solid $darkerborder;
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  th, td {
+    border-bottom: 1px solid $greyborder;
+  }
+
+  th {
+    font-size: 14px;
+    padding: 16px $tblHzPadding;
+    text-align: left;
+    font-weight: bold;
+    background-color: white;
+    color: darken($midgrey, 20%);
+    cursor: pointer;
+  .carrot {
+    line-height: 1;
+    margin-left: 2px;
+    font-family: sans-serif;
+    position: relative;
+    display: inline-block;
+    opacity: 0;
+    color: lighten($darkgrey, 20%);
+    &::after {
+    content: "\25BE"
+    }
+    top: -1px;
+    &.up {
+    top: 0;
+    transform: rotate(180deg);
+    }
+  }
+  &.selected .carrot {
+    opacity: 1;
+    color: $pink;
+  }
+  &:hover {
+    background: $grey;
+    .carrot {opacity: 1}
+  }
+
+
+  &.settings {
+    padding: 0;
+    width: 20px;
+
+    // background: $pink;
+    // border: none;
+    // color: white;
+    // border-radius: 0 3px 3px 0;
+    // &:hover {
+    //   background: lighten($pink, 5%);
+    // }
+
+    color: $pink;
+
+    text-align: center;
+    position: relative;
+    user-select: none;
+
+    button {
+    color: inherit;
+    background: none;
+    border: none;
+    font-size: 24px;
+    &:focus {
+      outline: none;
+    }
+    &::after {
+      position: relative;
+      content: "...";
+      top: -0.3em;
+    }
+    }
+
+    .menu {
+    text-align: left;
+    background: white;
+    color: $darkgrey;
+    border: 1px solid #DDD;
+    position: absolute;
+    top: 100%;
+    right: 1px;
+    margin: 0;
+    padding: 5px;
+    list-style: none;
+    z-index: 1;
+    white-space: nowrap;
+    font-size: 13px;
+    li {
+      margin: 0;
+      padding: 4px 10px;
+      input {
+      display: inline-block;
+      }
+    }
+    }
+  }
+
+  }
+
+  td {
+    padding: 8px $tblHzPadding;
+    font-family: Monaco, Inconsolata, monospace;
+    &:first-child {
+      font-family: inherit;
+    }
+  }
+
+  tr:nth-child(even) td {
+  background: $grey;
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tfoot tr th {
+    border-top: 1px solid $darkerborder;
+    font-family: Monaco, Inconsolata, monospace;
+    &:first-child {
+      font-family: inherit;
+    }
+    border-bottom: none;
+  }
+
+}
+
+// Input
+
+.Input {
+  background-color: #fff;
+  border-color: #d9d9d9 #ccc #b3b3b3;
+  border-radius: 2px;
+  border: 1px solid darken($border-blue, 5%);
+  color: #333;
+  cursor: default;
+  display: table;
+  height: 41px;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+  padding: 0 10px;
+}
+
+/**
+ * React Select
+ * ============
+ * Created by Jed Watson and Joss Mackison for KeystoneJS, http://www.keystonejs.com/
+ * https://twitter.com/jedwatson https://twitter.com/jossmackison https://twitter.com/keystonejs
+ * MIT License: https://github.com/keystonejs/react-select
+*/
+
+$selectHeight: 41px;
+$selectBorderRadius: 2px;
+
+.Select {
+  position: relative;
+}
+.Select,
+.Select div,
+.Select input,
+.Select span {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.Select.is-disabled > .Select-control {
+  background-color: #f6f6f6;
+}
+.Select.is-disabled .Select-arrow-zone {
+  cursor: default;
+  pointer-events: none;
+}
+.Select-control {
+  background-color: #fff;
+  border-color: #d9d9d9 #ccc #b3b3b3;
+  border-radius: $selectBorderRadius;
+  border: 1px solid darken($border-blue, 5%);
+  color: #333;
+  cursor: default;
+  display: table;
+  height: $selectHeight;
+  outline: none;
+  overflow: hidden;
+  position: relative;
+  width: 100%;
+}
+.Select-control:hover {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+}
+.is-searchable.is-open > .Select-control {
+  cursor: text;
+}
+.is-open > .Select-control {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+  background: #fff;
+  border-color: #b3b3b3 #ccc #d9d9d9;
+}
+.is-open > .Select-control > .Select-arrow {
+  border-color: transparent transparent #999;
+  border-width: 0 5px 5px;
+}
+.is-searchable.is-focused:not(.is-open) > .Select-control {
+  cursor: text;
+}
+.is-focused:not(.is-open) > .Select-control {
+  border-color: #08c #0099e6 #0099e6;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1), 0 0 5px -1px rgba(0, 136, 204, 0.5);
+}
+.Select-placeholder {
+  bottom: 0;
+  color: #aaa;
+  left: 0;
+  line-height: $selectHeight;
+  padding-left: 10px;
+  padding-right: 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.has-value > .Select-control > .Select-placeholder {
+  color: #333;
+}
+.Select-value {
+  color: #aaa;
+  left: 0;
+  padding: 8px 52px 8px 10px;
+  position: absolute;
+  right: -15px;
+  top: 0;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.has-value > .Select-control > .Select-value {
+  color: #333;
+}
+.Select-input {
+  height: $selectHeight;
+  padding-left: 10px;
+  padding-right: 10px;
+  vertical-align: middle;
+}
+.Select-input > input {
+  background: none transparent;
+  border: 0 none;
+  box-shadow: none;
+  cursor: default;
+  display: inline-block;
+  font-family: inherit;
+  font-size: inherit;
+  height: $selectHeight;
+  margin: 0;
+  outline: none;
+  padding: 0;
+  -webkit-appearance: none;
+}
+.is-focused .Select-input > input {
+  cursor: text;
+}
+.Select-control:not(.is-searchable) > .Select-input {
+  outline: none;
+}
+.Select-loading-zone {
+  cursor: pointer;
+  display: table-cell;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 16px;
+}
+.Select-loading {
+  -webkit-animation: Select-animation-spin 400ms infinite linear;
+  -o-animation: Select-animation-spin 400ms infinite linear;
+  animation: Select-animation-spin 400ms infinite linear;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  border-right-color: #333;
+  display: inline-block;
+  position: relative;
+  vertical-align: middle;
+}
+.Select-clear-zone {
+  -webkit-animation: Select-animation-fadeIn 200ms;
+  -o-animation: Select-animation-fadeIn 200ms;
+  animation: Select-animation-fadeIn 200ms;
+  color: #999;
+  cursor: pointer;
+  display: table-cell;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 17px;
+}
+.Select-clear-zone:hover {
+  color: #D0021B;
+}
+.Select-clear {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 1;
+}
+.Select--multi .Select-clear-zone {
+  width: 17px;
+}
+.Select-arrow-zone {
+  cursor: pointer;
+  display: table-cell;
+  position: relative;
+  text-align: center;
+  vertical-align: middle;
+  width: 25px;
+  padding-right: 5px;
+}
+.Select-arrow {
+  border-color: #999 transparent transparent;
+  border-style: solid;
+  border-width: 5px 5px 2.5px;
+  display: inline-block;
+  height: 0;
+  width: 0;
+}
+.is-open .Select-arrow,
+.Select-arrow-zone:hover > .Select-arrow {
+  border-top-color: #666;
+}
+@-webkit-keyframes Select-animation-fadeIn {
+  from {
+  opacity: 0;
+  }
+  to {
+  opacity: 1;
+  }
+}
+@keyframes Select-animation-fadeIn {
+  from {
+  opacity: 0;
+  }
+  to {
+  opacity: 1;
+  }
+}
+.Select-menu-outer {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-top-color: #e6e6e6;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06);
+  box-sizing: border-box;
+  margin-top: -1px;
+  max-height: 200px;
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  z-index: 1000;
+  -webkit-overflow-scrolling: touch;
+}
+.Select-menu {
+  max-height: 198px;
+  overflow-y: auto;
+}
+.Select-option {
+  box-sizing: border-box;
+  color: #666666;
+  cursor: pointer;
+  display: block;
+  padding: 8px 10px;
+}
+.Select-option:last-child {
+  border-bottom-right-radius: 4px;
+  border-bottom-left-radius: 4px;
+}
+.Select-option.is-focused {
+  background-color: #f2f9fc;
+  color: #333;
+}
+.Select-option.is-disabled {
+  color: #cccccc;
+  cursor: not-allowed;
+}
+.Select-noresults,
+.Select-search-prompt,
+.Select-searching {
+  box-sizing: border-box;
+  color: #999999;
+  cursor: default;
+  display: block;
+  padding: 8px 10px;
+}
+.Select--multi .Select-input {
+  vertical-align: middle;
+  margin-left: 10px;
+  padding: 0;
+}
+.Select--multi.has-value .Select-input {
+  margin-left: 5px;
+}
+.Select-item {
+  background-color: #f2f9fc;
+  border-radius: 2px;
+  border: 1px solid #c9e6f2;
+  color: #08c;
+  display: inline-block;
+  font-size: 0.9em;
+  margin-left: 5px;
+  margin-top: 5px;
+  vertical-align: top;
+}
+.Select-item-icon,
+.Select-item-label {
+  display: inline-block;
+  vertical-align: middle;
+}
+.Select-item-label {
+  border-bottom-right-radius: 2px;
+  border-top-right-radius: 2px;
+  cursor: default;
+  padding: 2px 5px;
+}
+.Select-item-label .Select-item-label__a {
+  color: #08c;
+  cursor: pointer;
+}
+.Select-item-icon {
+  cursor: pointer;
+  border-bottom-left-radius: 2px;
+  border-top-left-radius: 2px;
+  border-right: 1px solid #c9e6f2;
+  padding: 1px 5px 3px;
+}
+.Select-item-icon:hover,
+.Select-item-icon:focus {
+  background-color: #ddeff7;
+  color: #0077b3;
+}
+.Select-item-icon:active {
+  background-color: #c9e6f2;
+}
+.Select--multi.is-disabled .Select-item {
+  background-color: #f2f2f2;
+  border: 1px solid #d9d9d9;
+  color: #888;
+}
+.Select--multi.is-disabled .Select-item-icon {
+  cursor: not-allowed;
+  border-right: 1px solid #d9d9d9;
+}
+.Select--multi.is-disabled .Select-item-icon:hover,
+.Select--multi.is-disabled .Select-item-icon:focus,
+.Select--multi.is-disabled .Select-item-icon:active {
+  background-color: #f2f2f2;
+}
+@keyframes Select-animation-spin {
+  to {
+  transform: rotate(1turn);
+  }
+}
+@-webkit-keyframes Select-animation-spin {
+  to {
+  -webkit-transform: rotate(1turn);
+  }
+}
+

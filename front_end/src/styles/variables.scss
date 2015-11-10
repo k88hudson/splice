@@ -1,4 +1,4 @@
-$font-default: 'Open Sans', sans-serif;
+$font-default: 'Fira Sans', sans-serif;
 $font-heading: 'Montserrat', sans-serif;
 
 $font-color-default: #363755;
@@ -12,6 +12,16 @@ $color-pink: #cf375f;
 $color-aqua: #7dd9ae;
 $color-navy: #263b4f;
 $color-light-navy: #4f5f6f;
+
+$darkgrey: #5C5D6F;
+$light-blue: #F4F7FA;
+$secondary-blue: #364760;
+$border-blue: darken($light-blue, 5%);
+$grey: #F8FAFC;
+$midgrey: #808FA3;
+$greyborder: #E7E9ED;
+$darkerborder: darken($greyborder, 10%);
+$pink: lighten($color-pink, 10%);
 
 @mixin top-inset-shadow() {
   -webkit-box-shadow: inset 0px 15px 5px -10px rgba(0,0,0,0.3);
