@@ -32,10 +32,13 @@ def get_stats(group_by, filters=None):
 
         other_groups = group_by[:]
         other_groups.remove('category')
+        if 'date' in other_groups:
+            other_groups.remove('date')
 
         base_table = (
             env.db.session.query(
                 category.label('category'),
+                isd.c.date,
                 isd.c.tile_id,
                 isd.c.impressions,
                 isd.c.clicks,

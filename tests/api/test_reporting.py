@@ -60,6 +60,7 @@ class TestReportingAPI(BaseTestCase):
         """Test group by category"""
         self.helper_test_set(filters={'group_by': 'category'})
         self.helper_test_set(filters={'group_by': 'category', 'channel_id': 1})
+        self.helper_test_set(filters={'group_by': 'category', 'start_date': '2015-09-01', 'end_date': '2015-10-30'})
 
     def test_group_by_multiple(self):
         """Test group by multiple categories"""
