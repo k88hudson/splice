@@ -34,11 +34,12 @@ def reporting_fields(group_by):
         'pinned': fields.Integer,
         'blocked': fields.Integer
     }
-    resp_fields[group_by] = valid_group_by.get(group_by)
+    for field in group_by:
+        resp_fields[field] = valid_group_by.get(field)
     return resp_fields
 
 req_parser = reqparse.RequestParser()
-req_parser.add_argument('group_by', choices=valid_group_by.keys(), default='date')
+req_parser.add_argument('group_by', action='append', choices=valid_group_by.keys(), default=['date'])
 for field, options in valid_filters.iteritems():
     req_parser.add_argument(field, **options)
 

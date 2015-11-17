@@ -14,9 +14,10 @@ def get_stats(group_by, filters=None):
     campaign_id = filters.get('campaign_id', None)
     base_table = isd
     tiles = []
+    group_by_columns = []
 
     # Fields
-    if group_by == 'category':
+    if 'category' in group_by:
         grouped_tiles = get_tiles(campaign_id=campaign_id, group_by='category', filters=filters)
         if not grouped_tiles:
             return None
@@ -29,22 +30,21 @@ def get_stats(group_by, filters=None):
             grouped_tiles
         ))
 
+        other_groups = group_by[:]
+        other_groups.remove('category')
+
         base_table = (
             env.db.session.query(
                 category.label('category'),
-                isd.c.date,
                 isd.c.tile_id,
                 isd.c.impressions,
                 isd.c.clicks,
                 isd.c.pinned,
                 isd.c.blocked,
-                isd.c.country_code
+                *other_groups
             )
             .filter(isd.c.tile_id.in_(tiles))
         ).subquery()
-
-        group_by_column = base_table.c.category
-
     else:
         tiles = get_tiles(campaign_id=campaign_id, limit_fields=['id'], filters=filters)
         if not tiles:
@@ -52,30 +52,26 @@ def get_stats(group_by, filters=None):
         else:
             tiles = [t['id'] for t in tiles]
 
-        group_by_column = {
-            'date': isd.c.date,
-            'week': isd.c.week,
-            'month': isd.c.month,
-            'locale': isd.c.locale,
-            'country_code': isd.c.country_code
-        }.get(group_by)
+    for column in group_by:
+        group_by_columns.append(base_table.c[column])
+
+    query = group_by_columns + [
+        func.sum(base_table.c.impressions).label('impressions'),
+        func.sum(base_table.c.clicks).label('clicks'),
+        func.sum(base_table.c.pinned).label('pinned'),
+        func.sum(base_table.c.blocked).label('blocked')
+    ]
 
     # Base query
     rows = (
         env.db.session
-        .query(
-            group_by_column,
-            func.sum(base_table.c.impressions).label('impressions'),
-            func.sum(base_table.c.clicks).label('clicks'),
-            func.sum(base_table.c.pinned).label('pinned'),
-            func.sum(base_table.c.blocked).label('blocked')
-        )
-        .group_by(group_by_column)
-        .order_by(group_by_column)
+        .query(*query)
+        .group_by(*group_by_columns)
+        .order_by(group_by_columns[0])
     )
 
     # Filters
-    if not group_by == 'category':
+    if 'category' not in group_by:
         rows = rows.filter(base_table.c.tile_id.in_(tiles))
     if 'country_code' in filters:
         rows = rows.filter(base_table.c.country_code == filters['country_code'])

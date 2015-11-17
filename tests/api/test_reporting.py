@@ -11,10 +11,13 @@ class TestReportingAPI(BaseTestCase):
 
     def helper_test_set(self, filters={}, status_code=200, base_url='api.reporting.stats', empty=False):
         group_by = filters.get('group_by')
+        if type(group_by) is str:
+            group_by_fields = [group_by]
+        else:
+            group_by_fields = group_by or ['date']
         query = {'campaign_id': 1}
         query.update(filters)
         url = url_for(base_url, **query)
-        print(url)
 
         result = self.client.get(url)
         assert_equal(result.status_code, status_code)
@@ -26,9 +29,9 @@ class TestReportingAPI(BaseTestCase):
         else:
             assert_equal(len(resp['results']), 0)
 
-        if group_by:
-            for r in resp['results']:
-                assert(r.get(group_by))
+        for r in resp['results']:
+            for field in group_by_fields:
+                assert(r.get(field))
 
         return resp
 
@@ -37,6 +40,11 @@ class TestReportingAPI(BaseTestCase):
         default_resp = self.helper_test_set()
         date_resp = self.helper_test_set(filters={'group_by': 'date'})
         assert_equal(default_resp, date_resp)
+
+    def test_week_month(self):
+        """Test group by week, month"""
+        self.helper_test_set(filters={'group_by': 'week'})
+        self.helper_test_set(filters={'group_by': 'month'})
 
     def test_locale(self):
         """Test group by locale"""
@@ -52,6 +60,12 @@ class TestReportingAPI(BaseTestCase):
         """Test group by category"""
         self.helper_test_set(filters={'group_by': 'category'})
         self.helper_test_set(filters={'group_by': 'category', 'channel_id': 1})
+
+    def test_group_by_multiple(self):
+        """Test group by multiple categories"""
+        self.helper_test_set(filters={'group_by': ['date', 'category']})
+        self.helper_test_set(filters={'group_by': ['category', 'country_code', 'locale']})
+        self.helper_test_set(filters={'group_by': ['date', 'category'], 'locale': 'en-US'})
 
     def test_reporting_stats_empty(self):
         """Test reporting stats empty response"""
