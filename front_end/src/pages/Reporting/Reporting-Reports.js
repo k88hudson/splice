@@ -195,10 +195,14 @@ const ReportingReports = React.createClass({
               onClick={() => this.setState({showEditor: true})}>
               <span className="icon ion-edit" /> Edit report
             </button>
+            <button className="btn btn-default btn-emphasis"
+              onClick={() => this.refs.table.download(`${currentCampaign.name}-stats.csv`)}>
+              <span className="icon ion-document" /> Download as .csv
+            </button>
           </div>
         </h2>
         <CampaignSummary campaign={currentCampaign} query={query} />
-        <Table fields={fields} data={stats} fieldsEditable={true} />
+        <Table ref="table" fields={fields} data={stats} fieldsEditable={true} />
       </main>
     </div>);
   },
