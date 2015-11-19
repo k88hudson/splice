@@ -3,112 +3,20 @@ import React from 'react';
 
 import {connect} from 'react-redux';
 import moment from 'moment';
+import Select from 'react-select';
+import {Table} from 'react-table';
+
 import {fetchCampaigns, fetchCampaign, campaignSetFilter} from 'actions/Campaigns/CampaignActions';
 import {fetchAccounts} from 'actions/Accounts/AccountActions';
 import {fetchStats} from 'actions/Stats/StatsActions';
 
-import Select from 'react-select';
-import Table from 'components/Table/Table';
 import CampaignSummary from './CampaignSummary';
-import Chart from './ReportChart';
-
-const FILTERS = ['campaign_id', 'start_date', 'end_date', 'adgroup_type', 'channel_id', 'country_code', 'locale'];
-const DEFAULT_REPORT_SETTINGS = {
-  account_id: null,
-  campaign_id: null,
-  group_by: ['date'],
-  start_date: null,
-  end_date: null,
-
-  // Optional filters
-  adgroup_type: null,
-  channel_id: null,
-  country_code: null,
-  locale: null
-};
-
-const GROUP_BY_OPTIONS = [
-  {value: 'date', label: 'Date'},
-  {value: 'week', label: 'Week'},
-  {value: 'month', label: 'Month'},
-  {value: 'category', label: 'Category'},
-  {value: 'locale', label: 'Locale'},
-  {value: 'country_code', label: 'Country'}
-];
-
-function currency(n) {
-  const nString = n * 100 + '';
-  return `$${nString.slice(0, -1)}.${nString.slice(-2)}`;
-}
-
-function numberWithCommas(n) {
-  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
-}
-
-const BASE_FIELDS = [
-  {
-    label: 'Impressions',
-    key: 'impressions',
-    format: row => numberWithCommas(row.impressions),
-    sum: (a, b) => a + b
-  },
-  {
-    label: 'Clicks',
-    key: 'clicks',
-    format: row => numberWithCommas(row.clicks),
-    sum: (a, b) => a + b
-  },
-  {
-    label: 'CTR',
-    key: 'ctr',
-    raw: function(row) {
-      return row.impressions ? (row.clicks / row.impressions) : 0;
-    },
-    format: function(row) {
-      const ctr = row.impressions ? (row.clicks / row.impressions) : 0;
-      return `${Math.round(ctr * 10000000) / 100000}%`;
-    },
-    sum: (a, b) => {
-      return a + b;
-    }
-  },
-  {
-    label: 'Pinned',
-    key: 'pinned',
-    format: row => numberWithCommas(row.pinned),
-    sum: (a, b) => a + b
-  },
-  {
-    label: 'Blocked',
-    key: 'blocked',
-    format: row => numberWithCommas(row.blocked),
-    sum: (a, b) => a + b
-  }
-];
-
-const GROUP_BY_FIELDS = {
-  date: {
-    label: 'Date',
-    format: function(row) {
-      return moment(row.date, 'YYYY-MM-DD').format('MMM DD');
-    }
-  },
-  week: {
-    label: 'Week',
-    format: function(row) {
-      return `Week ${row.week}`;
-    }
-  },
-  month: {
-    label: 'Month',
-    format: function(row) {
-      return moment(row.month, 'MM').format('MMMM');
-    }
-  },
-  category: {label: 'Category'},
-  locale: {label: 'Locale'},
-  country_code: {label: 'Country'}
-};
+import {
+  FILTERS,
+  DEFAULT_REPORT_SETTINGS,
+  GROUP_BY_OPTIONS, GROUP_BY_FIELDS,
+  BASE_FIELDS
+} from './reportingConsts';
 
 function queryParser(query) {
   if (!query) return {};
@@ -186,7 +94,8 @@ const ReportingReports = React.createClass({
     const reportSettings = this.state;
     const currentCampaign = this.props.Campaign.details;
     const stats = this.props.Stat.rows || [];
-    const fields = this.fields();
+    const query = this.props.Stat.query;
+    const fields = createFieldSet(query.group_by);
 
     return (<div>
       <aside className={'sidebar' + (this.state.showEditor ? '' : ' collapsed')}>
@@ -305,7 +214,7 @@ const ReportingReports = React.createClass({
         </div>
       </aside>
       <main className="main" hidden={!currentCampaign.id}>
-        <h2> Report for {currentCampaign.name} by {this.props.Stat.query.group_by && this.props.Stat.query.group_by.map(field => GROUP_BY_FIELDS[field].label).join(' / ')}
+        <h2> Report for {currentCampaign.name} by {query.group_by && query.group_by.map(field => GROUP_BY_FIELDS[field].label).join(' / ')}
           <div className="pull-right">
             <button hidden={this.state.showEditor} className="btn btn-pink btn-emphasis"
               onClick={() => this.setState({showEditor: true})}>
@@ -313,10 +222,7 @@ const ReportingReports = React.createClass({
             </button>
           </div>
         </h2>
-        <CampaignSummary campaign={currentCampaign} query={this.props.Stat.query} />
-        {!!stats.length && false && <Chart
-          categories={stats.map(row => row[this.props.Stat.query.group_by])}
-          rows={stats} />}
+        <CampaignSummary campaign={currentCampaign} query={query} />
         <Table fields={fields} data={stats} fieldsEditable={true} />
       </main>
     </div>);
@@ -337,10 +243,6 @@ const ReportingReports = React.createClass({
     const groupBy = this.state.group_by.slice();
     groupBy.push('date');
     this.setState({group_by: groupBy});
-  },
-
-  fields: function() {
-    return createFieldSet(this.props.Stat.query.group_by);
   },
 
   campaignById: function(id) {

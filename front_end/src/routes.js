@@ -64,7 +64,7 @@ export default class App extends Component {
           <Route path="approvals" title="Approval Queue" component={ApprovalsPage}></Route>
 
           <Route path="reporting" title="Reporting" component={Reporting}>
-            <IndexRoute path="reports" title="Reporting | Reports" component={require('./pages/Reporting/Reporting-Reports')} />
+            <IndexRoute title="Reporting | Reports" component={require('./pages/Reporting/Reporting-Reports')} />
           </Route>
 
           <Route path="error404" title="Page Not Found" component={Error404Page}></Route>
