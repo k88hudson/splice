@@ -1,0 +1,26 @@
+.grid-wrapper {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+
+.grid-page {
+  display: flex;
+  flex: 1;
+  overflow-y: auto;
+  &.inner-scroll {
+    overflow-y: visible;
+  }
+}
+
+.grid-sidebar {
+  flex: 0 0 300px;
+  background: grey;
+  overflow-y: auto;
+}
+
+.grid-main {
+  background: white;
+  flex: 1;
+  overflow: auto;
+}

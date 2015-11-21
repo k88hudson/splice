@@ -1,11 +1,10 @@
 import React from 'react';
 
 export default React.createClass({
-  displayName: 'App',
+  displayName: 'TopBar',
   render: function () {
-    return (<div>
+    return (<header className="top-bar">
       Splice
-      {this.props.children}
-    </div>);
+    </header>);
   }
 });

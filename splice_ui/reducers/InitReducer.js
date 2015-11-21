@@ -13,11 +13,10 @@ const initialState = {
 
 export function Init(state = initialState, action = null) {
   switch (action.type) {
-    case REQUEST_INIT:{
+    case REQUEST_INIT:
       return Object.assign({}, state, {
         isFetching: true
       });
-    }
     case RECEIVE_INIT:
       return Object.assign({}, state, {
         categories: action.json.result.categories,

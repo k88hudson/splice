@@ -6,12 +6,12 @@
 // From config-default.json (all configuration under "public")
 
 const PUBLIC_KEY = 'public';
-const DEFAULT_CONFIG = require('../../config-default.json')[PUBLIC_KEY];
+const DEFAULT_CONFIG = require('../config-default.json')[PUBLIC_KEY];
 let LOCAL_CONFIG = {};
 const config = {};
 
 try {
-  LOCAL_CONFIG = require('../../config.json')[PUBLIC_KEY] || {};
+  LOCAL_CONFIG = require('../config.json')[PUBLIC_KEY] || {};
 } catch (e) {
   console.log('No local config.json found\n');
 }

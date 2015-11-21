@@ -21,6 +21,7 @@
     "brace-style": 0,
     "func-names": 0,
     "react/jsx-boolean-value": 0,
+    "react/no-multi-comp": 0,
     "space-before-function-paren": [1, {"anonymous": "always", "named": "never"}]
   },
   "env": {

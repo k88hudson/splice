@@ -9,11 +9,15 @@ import reducers from './reducers';
 
 const reducer = combineReducers(reducers);
 const store = finalCreateStore(reducer);
+const DevTools = __CONFIG__.DEVTOOLS === true ? require('components/DevTools/DevTools') : null;
 
 const App = React.createClass({
   render: function () {
     return (<div>
-      <Routes />
+      <Provider store={store}>
+        <Routes />
+      </Provider>
+      {DevTools ? <DevTools store={store} /> : null}
     </div>);
   }
 });

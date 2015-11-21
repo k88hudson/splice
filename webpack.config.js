@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const srcPath = absolute('./splice_ui/main.js')
 const distDir = absolute('./www');
 const distFilename = 'main.bundle.js';
-const CONFIG = require('./splice_ui/build_scripts/load-config');
+const CONFIG = require('./build_scripts/load-config');
 
 module.exports = {
   entry: srcPath,
