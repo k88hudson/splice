@@ -4,7 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build:js": "webpack",
+    "start": "npm-run-all --parallel server watch:*",
+    "watch:static": "cpx \"splice_ui/static/**/*\" www -w",
+    "watch:webpack": "webpack-dev-server --port 9999 -d --hot --inline --content-base www/",
+    "lint": "eslint splice_ui"
   },
   "repository": {
     "url": "https://github.com/oyiptong/splice"
@@ -13,5 +17,32 @@
   "license": "MPL-2.0",
   "bugs": {
     "url": "https://github.com/oyiptong/splice/issues"
+  },
+  "dependencies": {
+    "history": "^1.13.1",
+    "isomorphic-fetch": "^2.2.0",
+    "react": "^0.14.3",
+    "react-dom": "^0.14.3",
+    "react-redux": "^4.0.0",
+    "react-router": "^1.0.0",
+    "redux": "^3.0.4",
+    "redux-devtools": "^2.1.5",
+    "redux-logger": "^2.0.4",
+    "redux-thunk": "^1.0.0"
+  },
+  "devDependencies": {
+    "babel-core": "6.2.1",
+    "babel-loader": "6.2.0",
+    "babel-preset-es2015": "6.1.18",
+    "babel-preset-react": "6.1.18",
+    "cpx": "1.2.1",
+    "eslint": "1.9.0",
+    "eslint-config-airbnb": "1.0.0",
+    "eslint-config-airplus": "^1.0.4",
+    "eslint-loader": "1.1.1",
+    "eslint-plugin-react": "3.9.0",
+    "npm-run-all": "1.3.1",
+    "webpack": "1.12.7",
+    "webpack-dev-server": "^1.12.1"
   }
 }
